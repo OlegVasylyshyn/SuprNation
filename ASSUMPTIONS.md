@@ -29,4 +29,5 @@ parameters _by-name_ will make it faster to init. But not sure if it will be sui
 10. No... didn't fix the bug.
 11. Decided to get rid of Tree structure and implement simple array calculation.
 12. Found some ideas in the Web (sorry.. :troll)
-13. 
+13. Added tests..
+14. Btw, works for data_big as well.

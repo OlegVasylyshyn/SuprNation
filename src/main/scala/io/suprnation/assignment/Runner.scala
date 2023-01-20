@@ -4,7 +4,7 @@ import scala.io.Source
 
 @main def run(): Unit =
 
-  val filename = "data_small.txt"
+  val filename = "data_big.txt"
   val source = Source.fromResource(filename)
 
   val ints = source.getLines().map { line =>
