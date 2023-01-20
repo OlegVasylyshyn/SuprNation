@@ -5,8 +5,12 @@ sealed trait Tree:
 
   def value: Int
 
-case class Node(left: Tree, right: Tree, value: Int) extends Tree:
-  override def toString: String = s"Node(left: $left, right: $right, value: $value)"
+case class Node(value: Int, left: Tree, right: Tree) extends Tree:
+  override def toString: String =
+    s"""Node
+       |value: $value,
+       |left: $left, right: $right
+       |""".stripMargin
 
 case class Leaf(value: Int) extends Tree:
   override def toString: String = s"Leaf($value)"
@@ -25,12 +29,11 @@ object Tree:
   def apply(ints: Array[Array[Int]]): Tree =
     def init(ints: Array[Array[Int]], startPoint: (Int, Int)): Tree =
       val (x, y) = startPoint
-      if x >= ints.length || y >= ints(x).length then Empty
+      if y >= ints.length || x >= ints(y).length then Empty
       else
-        val value = ints(x)(y)
-        val leftSubNode = init(ints, (x, y + 1))
-        val rightSubNode = init(ints, (x + 1, y + 1))
+        val value = ints(y)(x)
+        val (leftSubNode, rightSubNode) = parallel(init(ints, (x, y + 1)), init(ints, (x + 1, y + 1)))
         if leftSubNode.isEmpty && rightSubNode.isEmpty then Leaf(value)
-        else Node(leftSubNode, rightSubNode, value)
+        else Node(value, leftSubNode, rightSubNode)
 
     init(ints, (0, 0))
