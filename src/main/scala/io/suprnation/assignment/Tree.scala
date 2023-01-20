@@ -8,15 +8,38 @@ sealed trait Tree:
 
   def isEmpty: Boolean = false
 
+  def size: Int
+
+  def minPath: Int
+
   def value: Int
 
-case class Node(value: Int, left: Tree, right: Tree, size: Int) extends Tree:
+var i = 0
+
+case class Node(value: Int, left: Tree, right: Tree) extends Tree:
   def insert(x: Int): Tree =
     this match
-      case Node(_, left, Empty, _) =>
-        Node(value, left, Leaf(x), size)
-      case Node(_, _, _, _) =>
-        Node(value, left.insert(x), right, size + 1)
+      case Node(_, left, Empty) =>
+        Node(value, left, Leaf(x))
+      case Node(_, leftTree, rightTree) =>
+
+        leftTree match
+          case Node(value, _, Empty) =>
+            Node(value, left.insert(x), right.insert(x))
+          case Leaf(_) =>
+            Node(value, left.insert(x), right)
+          case _ =>
+            Node(value, left, right.insert(x))
+
+//        if right.size >= left.size then
+//          Node(value, left.insert(x), right, size + 1)
+//        else
+//          Node(value, left, right.insert(x), size + 1)
+
+  def size: Int = 1 + right.size + left.size
+
+  def minPath: Int =
+    value + left.minPath.min(right.minPath)
 
 
   override def toString: String =
@@ -28,8 +51,12 @@ case class Node(value: Int, left: Tree, right: Tree, size: Int) extends Tree:
 
 case class Leaf(value: Int) extends Tree:
 
+  def size: Int = 1
+
   def insert(int: Int): Tree =
-    Node(value, Leaf(int), Empty, size = 2)
+    Node(value, Leaf(int), Empty)
+
+  def minPath: Int = value
 
   override def toString: String = s"Leaf($value)"
 
@@ -41,7 +68,11 @@ case object Empty extends Tree:
 
   override def isEmpty: Boolean = true
 
+  def minPath: Int = 0
+
   def value: Int = throw new NotImplementedError("value on Empty tree")
+
+  def size: Int = throw new NotImplementedError("size on Empty tree")
 
   override def toString: String = s"Empty"
 
@@ -58,7 +89,6 @@ object Tree:
         xs match
           case Nil => acc
           case head :: next =>
-//            Thread.sleep(1000)
             initFromList(next, acc.insert(head))
 
       ints match

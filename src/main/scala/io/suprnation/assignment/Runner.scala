@@ -13,17 +13,11 @@ import scala.io.Source
 
   source.close()
 
-  //  println("Was parsed next data: ")
-  //  for (arr <- ints) {
-  //    println()
-  //    arr.foreach(print)
-  //  }
-
-  //  println(s"Total size: ${
-  //    ints.map(_.length).sum
-  //  }")
-
   val tree = Tree(ints)
 
   println(tree)
+
+  println()
+
+  println(tree.minPath)
 
