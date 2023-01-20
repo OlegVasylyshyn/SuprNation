@@ -8,16 +8,20 @@ import scala.io.Source
   val source = Source.fromResource(filename)
 
   val ints = source.getLines().map { line =>
-    line.split(" ").map(Integer.parseInt)
-  }.toArray
+    line.split(" ").map(Integer.parseInt).toList
+  }.toList
 
   source.close()
 
-//  println("Was parsed next data: ")
-//  for (arr <- ints) {
-//    println()
-//    arr.foreach(print)
-//  }
+  //  println("Was parsed next data: ")
+  //  for (arr <- ints) {
+  //    println()
+  //    arr.foreach(print)
+  //  }
+
+  //  println(s"Total size: ${
+  //    ints.map(_.length).sum
+  //  }")
 
   val tree = Tree(ints)
 

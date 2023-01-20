@@ -1,22 +1,44 @@
 package io.suprnation.assignment
 
+import scala.annotation.tailrec
+
 sealed trait Tree:
+
+  def insert(int: Int): Tree
+
   def isEmpty: Boolean = false
 
   def value: Int
 
-case class Node(value: Int, left: Tree, right: Tree) extends Tree:
+case class Node(value: Int, left: Tree, right: Tree, size: Int) extends Tree:
+  def insert(x: Int): Tree =
+    this match
+      case Node(_, left, Empty, _) =>
+        Node(value, left, Leaf(x), size)
+      case Node(_, _, _, _) =>
+        Node(value, left.insert(x), right, size + 1)
+
+
   override def toString: String =
     s"""Node
        |value: $value,
+       |size: $size,
        |left: $left, right: $right
        |""".stripMargin
 
 case class Leaf(value: Int) extends Tree:
+
+  def insert(int: Int): Tree =
+    Node(value, Leaf(int), Empty, size = 2)
+
   override def toString: String = s"Leaf($value)"
 
 
 case object Empty extends Tree:
+
+  def insert(int: Int): Tree =
+    Leaf(int)
+
   override def isEmpty: Boolean = true
 
   def value: Int = throw new NotImplementedError("value on Empty tree")
@@ -26,14 +48,23 @@ case object Empty extends Tree:
 
 object Tree:
 
-  def apply(ints: Array[Array[Int]]): Tree =
-    def init(ints: Array[Array[Int]], startPoint: (Int, Int)): Tree =
-      val (x, y) = startPoint
-      if y >= ints.length || x >= ints(y).length then Empty
-      else
-        val value = ints(y)(x)
-        val (leftSubNode, rightSubNode) = parallel(init(ints, (x, y + 1)), init(ints, (x + 1, y + 1)))
-        if leftSubNode.isEmpty && rightSubNode.isEmpty then Leaf(value)
-        else Node(value, leftSubNode, rightSubNode)
+  def apply(ints: List[List[Int]]): Tree =
 
-    init(ints, (0, 0))
+    @tailrec
+    def init(ints: List[List[Int]], acc: Tree): Tree =
+
+      @tailrec
+      def initFromList(xs: List[Int], acc: Tree): Tree =
+        xs match
+          case Nil => acc
+          case head :: next =>
+//            Thread.sleep(1000)
+            initFromList(next, acc.insert(head))
+
+      ints match
+        case Nil => acc
+        case head :: next =>
+          init(next, initFromList(head, acc))
+
+    init(ints, Empty)
+
