@@ -8,16 +8,11 @@ import scala.io.Source
   val source = Source.fromResource(filename)
 
   val ints = source.getLines().map { line =>
-    line.split(" ").map(Integer.parseInt).toList
-  }.toList
+    line.split(" ").map(Integer.parseInt)
+  }.toArray
 
   source.close()
 
-  val tree = Tree(ints)
+  println(TrianglePath.min(ints))
 
-  println(tree)
-
-  println()
-
-  println(tree.minPath)
 

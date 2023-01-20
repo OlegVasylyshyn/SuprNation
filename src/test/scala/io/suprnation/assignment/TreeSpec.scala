@@ -7,30 +7,20 @@ import scala.collection.immutable.List
 
 class TreeSpec extends AnyFlatSpec with Matchers {
 
-  private val ints = List(
-        List(1),
-       List(1, 2),
-      List(1, 2, 3)
+  private val triangle = Array(
+    Array(1),
+    Array(1, 2),
+    Array(1, 2, 3),
+    Array(1, 2, 3, 4),
+    Array(1, 2, 3, 4, 5)
   )
 
-  private val expectedTree = Node(
-    1,
-    Node(
-      1,
-      Leaf(1),
-      Leaf(2)
-    ),
-    Node(
-      2,
-      Leaf(2),
-      Leaf(3)
-    )
-  )
+  "TrianglePath" should "calculate min path" in {
+    TrianglePath.min(triangle) shouldBe 5
+  }
 
-  "Tree" should "be initialized" in {
-    val actualTree = Tree(ints)
-    actualTree shouldBe expectedTree
-    actualTree.size shouldBe expectedTree.size
+  "TrianglePath" should "calculate max path" in {
+    TrianglePath.max(triangle) shouldBe 15
   }
 
 }
