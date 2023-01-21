@@ -2,10 +2,11 @@ package io.suprnation.assignment
 
 import scala.io.Source
 
-@main def run(): Unit =
+@main def run(fileName: String): Unit =
 
-  val filename = "data_big.txt"
-  val source = Source.fromResource(filename)
+  println(s"FILE - $fileName")
+
+  val source = Source.fromResource(fileName)
 
   val ints = source.getLines().map { line =>
     line.split(" ").map(Integer.parseInt)
@@ -13,6 +14,8 @@ import scala.io.Source
 
   source.close()
 
-  println(TrianglePath.min(ints))
+  println(s"MIN PATH - ${TrianglePath.min(ints)}")
+  println(s"MAX PATH - ${TrianglePath.max(ints)}")
+
 
 
